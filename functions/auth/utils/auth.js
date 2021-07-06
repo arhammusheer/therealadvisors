@@ -25,7 +25,7 @@ const getDiscordStrategy = function () {
     {
       clientID: DISCORD_CLIENT_ID,
       clientSecret: DISCORD_CLIENT_SECRET,
-      callbackURL: `/${ENDPOINT}/discord/callback`,
+      callbackURL: `${ENDPOINT}/discord/callback`,
       scope: ["identify", "email", "guilds"],
     },
     async (accessToken, refreshToken, profile, done) => {
