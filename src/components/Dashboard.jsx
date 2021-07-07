@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   Heading,
-  IconButton,
   Input,
   InputGroup,
   Link,
@@ -90,7 +89,7 @@ function IsInServerComponent({ user }) {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [isAcademic, setIsAcademic] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
   async function handleEmail(event) {
     setEmail(event.target.value);
     let isAcademicEmail = await swot.isAcademic(event.target.value);
@@ -103,15 +102,31 @@ function IsInServerComponent({ user }) {
   }
 
   function handleForm(event) {
-    toast({
-      title: "Email Sent",
-      description:
-        "Your verification request has been submitted. Please check your college email.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
+    if (isAcademic) {
+      setIsLoading(true);
+      setTimeout(() => {
+        toast({
+          title: "Email Sent",
+          description:
+            "Your verification request has been submitted. Please check your college email.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setIsLoading(false);
+      }, 3000);
+    } else {
+      toast({
+        title: "Email is Non Academic",
+        description:
+          "The email you entered is not academic. If you're facing trouble, we request to apply for verification manually",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
     event.preventDefault();
+    event.target.reset();
   }
   return (
     <Stack
@@ -133,9 +148,17 @@ function IsInServerComponent({ user }) {
               value={email}
               type={"email"}
               isInvalid={!isAcademic}
+              required
             />
 
-            <IconButton borderRadius={"md"} icon={<ArrowRightIcon />} ml={1} />
+            <Button
+              borderRadius={"md"}
+              ml={1}
+              isLoading={isLoading}
+              type={"submit"}
+            >
+              <ArrowRightIcon />
+            </Button>
           </InputGroup>
           <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
             Enter an academic email
