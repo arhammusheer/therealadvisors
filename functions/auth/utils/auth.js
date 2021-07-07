@@ -35,13 +35,13 @@ const getDiscordStrategy = function () {
         const isInServer = profile.guilds.some(
           (guild) => guild.id == process.env.GUILD_ID
         );
-
         const user = {
           email: profile.email,
           username: profile.username,
           discriminator: profile.discriminator,
           id: profile.id,
           isInServer: isInServer,
+          avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}`,
         };
         const jwt = authJwt(user);
         return done(null, { user, jwt });
