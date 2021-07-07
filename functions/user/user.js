@@ -3,8 +3,15 @@ const { default: axios } = require("axios");
 const jwt = require("jsonwebtoken");
 
 const handler = async (event) => {
+  if (!event.headers.cookie) {
+    return {
+      statusCode: 400,
+      body: "Missing cookie",
+    };
+  }
   try {
     const token = extractCookies(event.headers.cookie).jwt;
+
     const payload = jwt.verify(token, process.env.SECRET);
     // await axios.put(
     //   `https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${token.user.id}/roles/${process.env.ROLE_ID}`,

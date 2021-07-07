@@ -17,6 +17,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import * as swot from "swot-node";
+import Error from "./Error";
 
 export default function Dashboard() {
   const [data, setData] = useState({});
@@ -28,12 +29,20 @@ export default function Dashboard() {
         setData(response.data);
         setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setData({
+          error: { code: 401, message: "Unauthorized Client, Login Again." },
+        });
+      });
   }, []);
   if (loading) {
     return <Loading />;
   }
 
+  if (data.error) {
+    return <Error error={data.error} />;
+  }
   if (!data.isInServer) {
     return (
       <Flex align={"center"} justify={"center"} h={"100vh"}>
@@ -108,7 +117,8 @@ function EmailForm() {
   function handleForm(event) {
     if (isAcademic) {
       setIsLoading(true);
-      setTimeout(() => {
+      axios.post("/api/email", { email: email }).then((response) => {
+        setIsLoading(false);
         toast({
           title: "Email Sent",
           description:
@@ -117,8 +127,7 @@ function EmailForm() {
           duration: 5000,
           isClosable: true,
         });
-        setIsLoading(false);
-      }, 3000);
+      });
     } else {
       toast({
         title: "Email is Non Academic",

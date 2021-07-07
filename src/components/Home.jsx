@@ -31,7 +31,7 @@ export default function Home() {
           <Text fontSize={{ base: "2xl", md: "4xl" }}>Welcome to</Text>
           <Text
             fontSize={{ base: "4xl", md: "6xl" }}
-            bgGradient="linear(to-l, #0067FF,#00F640)"
+            bgGradient="linear(to-l, #347eeb,#cf2d08)"
             bgClip="text"
           >
             The Real Advisors

@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
-import NotFound from "./components/NotFound";
+import Error from "./components/Error";
 import Switcher from "./components/Switcher";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
               <Home />
             </Route>
             <Route path="*">
-              <NotFound />
+              <Error error={{message: "Page Not Found", code:404}} />
             </Route>
           </Switch>
         </AnimatePresence>
