@@ -8,7 +8,7 @@ const handler = async function () {
     );
     const embed = new Discord.MessageEmbed()
       .setTitle("Croissant Verified")
-      .setColor("#0099ff");
+      .setColor("#0099ff").addFields({name:"username",value:"<@490907114370236426>"});
 
     webhookClient.send("Croissant verification", {
       username: "croissant",

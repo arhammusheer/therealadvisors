@@ -12,7 +12,7 @@ const {
 } = require("./config");
 
 const authJwt = function (user) {
-  return sign({ user: user }, SECRET, { expiresIn: "5m" });
+  return sign({ user: user }, SECRET, { expiresIn: "24h" });
 };
 
 const applyPassportStrategies = function () {

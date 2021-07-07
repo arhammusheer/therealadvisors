@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Switcher from "./components/Switcher";
+
 function App() {
   return (
     <ChakraProvider>
@@ -13,7 +14,7 @@ function App() {
         <AnimatePresence>
           <Switch>
             <Route path="/dashboard">
-              <Dashboard />
+              <ProtectedDash />
             </Route>
             <Route path="/" exact>
               <Home />
@@ -27,5 +28,10 @@ function App() {
     </ChakraProvider>
   );
 }
+
+const ProtectedDash = () => {
+  return <Dashboard/>
+ 
+};
 
 export default App;
