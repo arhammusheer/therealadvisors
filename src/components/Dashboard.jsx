@@ -8,7 +8,6 @@ import {
   Link,
   Stack,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
