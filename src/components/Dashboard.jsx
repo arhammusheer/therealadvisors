@@ -1,17 +1,22 @@
+import { ArrowRightIcon, EmailIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Button,
-  Container,
   Flex,
   Heading,
+  IconButton,
+  Input,
+  InputGroup,
   Link,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
+import * as swot from "swot-node";
 
 export default function Dashboard() {
   const [data, setData] = useState({});
@@ -32,23 +37,19 @@ export default function Dashboard() {
   if (!data.isInServer) {
     return (
       <Flex align={"center"} justify={"center"} h={"100vh"}>
-        <Container>
-          <Stack direction={["column", "row"]} spacing={"2rem"}>
-            <NotInServerComponent user={data} />
-            <UserCard user={data} />
-          </Stack>
-        </Container>
+        <Stack direction={["column", "row"]} spacing={"1rem"}>
+          <NotInServerComponent user={data} />
+          <UserCard user={data} />
+        </Stack>
       </Flex>
     );
   }
   return (
     <Flex align={"center"} justify={"center"} h={"100vh"}>
-      <Container>
-        <Stack direction={["column", "row"]} spacing={"2rem"}>
-          <IsInServerComponent user={data} />
-          <UserCard user={data} />
-        </Stack>
-      </Container>
+      <Stack direction={["column", "row"]} spacing={"1rem"}>
+        <IsInServerComponent user={data} />
+        <UserCard user={data} />
+      </Stack>
     </Flex>
   );
 }
@@ -86,7 +87,63 @@ function NotInServerComponent({ user }) {
 }
 
 function IsInServerComponent({ user }) {
-  return "user";
+  const toast = useToast();
+  const [email, setEmail] = useState("");
+  const [isAcademic, setIsAcademic] = useState(true);
+
+  async function handleEmail(event) {
+    setEmail(event.target.value);
+    let isAcademicEmail = await swot.isAcademic(event.target.value);
+    if (isAcademicEmail) {
+      setIsAcademic(true);
+    } else {
+      setIsAcademic(false);
+    }
+    event.preventDefault();
+  }
+
+  function handleForm(event) {
+    toast({
+      title: "Email Sent",
+      description:
+        "Your verification request has been submitted. Please check your college email.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+    event.preventDefault();
+  }
+  return (
+    <Stack
+      align={"center"}
+      direction={["column", "row"]}
+      boxShadow={"lg"}
+      borderRadius={"xl"}
+      p={"5"}
+    >
+      <Stack direction={"column"} align={"center"}>
+        <EmailIcon w={"70px"} h={"70px"} />
+        <Text fontSize={"lg"}>Verify Using College Email</Text>
+        <form onSubmit={handleForm}>
+          <InputGroup>
+            <Input
+              placeholder="john@example.edu"
+              name={"college-email"}
+              onChange={handleEmail}
+              value={email}
+              type={"email"}
+              isInvalid={!isAcademic}
+            />
+
+            <IconButton borderRadius={"md"} icon={<ArrowRightIcon />} ml={1} />
+          </InputGroup>
+          <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
+            Enter an academic email
+          </Text>
+        </form>
+      </Stack>
+    </Stack>
+  );
 }
 
 function UserCard({ user }) {
