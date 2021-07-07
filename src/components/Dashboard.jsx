@@ -1,4 +1,4 @@
-import { ArrowRightIcon, EmailIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, ChatIcon, EmailIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -10,6 +10,7 @@ import {
   Link,
   Stack,
   Text,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -46,8 +47,8 @@ export default function Dashboard() {
   return (
     <Flex align={"center"} justify={"center"} h={"100vh"}>
       <Stack direction={["column", "row"]} spacing={"1rem"}>
-        <IsInServerComponent user={data} />
         <UserCard user={data} />
+        <IsInServerComponent user={data} />
       </Stack>
     </Flex>
   );
@@ -61,6 +62,8 @@ function NotInServerComponent({ user }) {
       boxShadow={"lg"}
       borderRadius={"xl"}
       p={"5"}
+      border
+      borderWidth={1}
     >
       <Avatar
         name={"The Real Advisors"}
@@ -85,11 +88,12 @@ function NotInServerComponent({ user }) {
   );
 }
 
-function IsInServerComponent({ user }) {
+function EmailForm() {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [isAcademic, setIsAcademic] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
   async function handleEmail(event) {
     setEmail(event.target.value);
     let isAcademicEmail = await swot.isAcademic(event.target.value);
@@ -128,43 +132,100 @@ function IsInServerComponent({ user }) {
     event.preventDefault();
     event.target.reset();
   }
+
+  return (
+    <Stack direction={"column"} align={"center"}>
+      <EmailIcon w={"70px"} h={"70px"} />
+      <Text fontSize={"lg"}>Verify Using College Email</Text>
+      <form onSubmit={handleForm}>
+        <InputGroup>
+          <Input
+            placeholder="john@example.edu"
+            name={"college-email"}
+            onChange={handleEmail}
+            value={email}
+            type={"email"}
+            isInvalid={!isAcademic}
+            required
+          />
+
+          <Button
+            borderRadius={"md"}
+            ml={1}
+            isLoading={isLoading}
+            type={"submit"}
+          >
+            <ArrowRightIcon />
+          </Button>
+        </InputGroup>
+        <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
+          Enter an academic email
+        </Text>
+      </form>
+    </Stack>
+  );
+}
+
+function DocumentForm() {
+  return (
+    <Stack direction={"column"} align={"center"}>
+      <ChatIcon w={"70px"} h={"70px"} />
+      <Text fontSize={"lg"}>Verify Using Documents</Text>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <InputGroup>
+          <Input
+            name={"college-document"}
+            // onChange={handleEmail}
+            // value={email}
+            type={"file"}
+            as={Button}
+            // isInvalid={!isAcademic}
+            required
+          >
+            Click Here to select your file
+          </Input>
+
+          <Button
+            borderRadius={"md"}
+            ml={1}
+            // isLoading={isLoading}
+            type={"submit"}
+          >
+            <ArrowRightIcon />
+          </Button>
+        </InputGroup>
+        {/* <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
+    Enter an academic email
+  </Text> */}
+      </form>
+    </Stack>
+  );
+}
+
+function IsInServerComponent({ user }) {
   return (
     <Stack
+      border
+      borderWidth={1}
       align={"center"}
       direction={["column", "row"]}
       boxShadow={"lg"}
       borderRadius={"xl"}
       p={"5"}
     >
-      <Stack direction={"column"} align={"center"}>
-        <EmailIcon w={"70px"} h={"70px"} />
-        <Text fontSize={"lg"}>Verify Using College Email</Text>
-        <form onSubmit={handleForm}>
-          <InputGroup>
-            <Input
-              placeholder="john@example.edu"
-              name={"college-email"}
-              onChange={handleEmail}
-              value={email}
-              type={"email"}
-              isInvalid={!isAcademic}
-              required
-            />
-
-            <Button
-              borderRadius={"md"}
-              ml={1}
-              isLoading={isLoading}
-              type={"submit"}
-            >
-              <ArrowRightIcon />
-            </Button>
-          </InputGroup>
-          <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
-            Enter an academic email
-          </Text>
-        </form>
-      </Stack>
+      <EmailForm />
+      <Box
+        bgColor={useColorModeValue("gray.200", "gray.600")}
+        w={{ base: "100%", sm: "1px" }}
+        h={{ base: "1px", sm: "100%" }}
+      >
+        &nbsp;
+      </Box>
+      <DocumentForm />
     </Stack>
   );
 }
@@ -172,6 +233,8 @@ function IsInServerComponent({ user }) {
 function UserCard({ user }) {
   return (
     <Stack
+      border
+      borderWidth={1}
       align={"center"}
       direction={"column"}
       boxShadow={"lg"}
