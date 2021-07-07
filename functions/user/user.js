@@ -6,13 +6,13 @@ const handler = async (event) => {
   try {
     const token = extractCookies(event.headers.cookie).jwt;
     const payload = jwt.verify(token, process.env.SECRET);
-    await axios.put(
-      `https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${token.user.id}/roles/${process.env.ROLE_ID}`,
-      { Authorization: `Bot ${process.env.BOT_TOKEN}` }
-    );
+    // await axios.put(
+    //   `https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${token.user.id}/roles/${process.env.ROLE_ID}`,
+    //   { Authorization: `Bot ${process.env.BOT_TOKEN}` }
+    // );
     return {
       statusCode: 200,
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload.user),
       // // more keys you can return:
       // headers: { "headerName": "headerValue", ... },
       // isBase64Encoded: true,

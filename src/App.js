@@ -14,7 +14,7 @@ function App() {
         <AnimatePresence>
           <Switch>
             <Route path="/dashboard">
-              <ProtectedDash />
+              <Dashboard />
             </Route>
             <Route path="/" exact>
               <Home />
@@ -28,10 +28,5 @@ function App() {
     </ChakraProvider>
   );
 }
-
-const ProtectedDash = () => {
-  return <Dashboard/>
- 
-};
 
 export default App;
