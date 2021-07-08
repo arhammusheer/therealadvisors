@@ -101,6 +101,7 @@ function NotInServerComponent({ user }) {
 function EmailForm() {
   const toast = useToast();
   const [email, setEmail] = useState("");
+  const [buttonColor, setButtonColor] = useState("blue");
   const [isAcademic, setIsAcademic] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -118,23 +119,39 @@ function EmailForm() {
   function handleForm(event) {
     if (isAcademic) {
       setIsLoading(true);
-      axios.post("/api/email", { email: email }).then((response) => {
-        setIsLoading(false);
-        toast({
-          title: "Email Sent",
-          description:
-            "Your verification request has been submitted. Please check your college email.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
+      axios
+        .post("/api/email", { email: email })
+        .then((response) => {
+          setIsLoading(false);
+          toast({
+            title: "Email Sent",
+            description:
+              "Your verification request has been submitted. Please check your college email.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+          setButtonColor("green");
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          toast({
+            title: "An Error occured",
+            description:
+              "We could not process your email. Please try again later.",
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+          });
+          console.log(err);
+          setButtonColor("red");
         });
-      });
     } else {
       toast({
         title: "Email is Non Academic",
         description:
           "The email you entered is not academic. If you're facing trouble, we request to apply for verification manually",
-        status: "error",
+        status: "warning",
         duration: 2000,
         isClosable: true,
       });
@@ -164,6 +181,7 @@ function EmailForm() {
             ml={1}
             isLoading={isLoading}
             type={"submit"}
+            colorScheme={buttonColor}
           >
             <ArrowRightIcon />
           </Button>
