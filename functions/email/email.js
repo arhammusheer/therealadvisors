@@ -55,8 +55,9 @@ Team Real Advisors
     try {
       sgMail
         .send(msg)
-        .then(() => console.log(`Email sent to ${msg.to}`))
+        .then(() => console.info(`Email sent to ${msg.to}`))
         .catch((err) => {
+          console.error(err);
           throw err;
         });
       return {
