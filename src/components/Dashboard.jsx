@@ -32,8 +32,9 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
         setData({
-          error: { code: 401, message: "Unauthorized Client, Login Again." },
+          error: { code: 401, message: "Token has expired, Login again." },
         });
+        setLoading(false);
       });
   }, []);
   if (loading) {
