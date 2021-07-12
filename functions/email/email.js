@@ -4,7 +4,7 @@ const sgMail = require("@sendgrid/mail");
 const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8888"
-    : process.env.BASE_URL;
+    : process.env.URL;
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "/.netlify/functions" : "/api";
