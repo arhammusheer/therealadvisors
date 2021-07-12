@@ -19,7 +19,7 @@ const handler = async (event) => {
       }).catch((err) => {
         throw err;
       });
-      
+
       return {
         statusCode: 204,
         body: instance.statusText,

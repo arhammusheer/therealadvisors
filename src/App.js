@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Error from "./components/Error";
 import Switcher from "./components/Switcher";
+import Verify from "./components/Verify";
 
 function App() {
   return (
@@ -16,11 +17,14 @@ function App() {
             <Route path="/dashboard">
               <Dashboard />
             </Route>
+            <Route path="/verify/:token">
+              <Verify />
+            </Route>
             <Route path="/" exact>
               <Home />
             </Route>
             <Route path="*">
-              <Error error={{message: "Page Not Found", code:404}} />
+              <Error error={{ message: "Page Not Found", code: 404 }} />
             </Route>
           </Switch>
         </AnimatePresence>
