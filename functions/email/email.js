@@ -55,6 +55,7 @@ Team Real Advisors
     };
 
     try {
+      console.log("Trying to send an email");
       sgMail
         .send(msg)
         .then(() => {
