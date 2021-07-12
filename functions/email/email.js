@@ -55,7 +55,7 @@ const handler = async (event) => {
 Hey there ${payload.user.username}#${payload.user.discriminator}!
 
 Please verify your email by clicking the link below.
-${BASE_URL}/verify?token=${newPayload}
+${BASE_URL}/verify/${newPayload}
 
 This link will expire in 1 hour.
 
