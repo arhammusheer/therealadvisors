@@ -56,7 +56,7 @@ Team Real Advisors
 
     try {
       console.log("Trying to send an email");
-      sgMail
+      await sgMail
         .send(msg)
         .then(() => {
           console.info(`Email sent to ${msg.to}`);
