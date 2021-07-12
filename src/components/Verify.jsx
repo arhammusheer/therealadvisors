@@ -10,27 +10,30 @@ export default function Verify() {
     "Please wait while we process your request"
   );
   const { token } = useParams();
+
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(async () => {
-    console.log(token);
-    await axios({
-      url: `/api/verify`,
-      method: "GET",
-      params: { token: token },
-    })
-      .then(() => {
-        setIsLoaded(true);
-        setColor("green");
-        setTitle(`Success: Role added`);
-        setMessage(`A verification role has been added to your user`);
+  useEffect(() => {
+    async function verification() {
+      await axios({
+        url: `/api/verify`,
+        method: "GET",
+        params: { token: token },
       })
-      .catch(() => {
-        setIsLoaded(true);
-        setColor("red");
-        setTitle(`Error: Failed verfication`);
-        setMessage(`The token provided is invalid`);
-      });
-  }, []);
+        .then(() => {
+          setIsLoaded(true);
+          setColor("green");
+          setTitle(`Success: Role added`);
+          setMessage(`A verification role has been added to your user`);
+        })
+        .catch(() => {
+          setIsLoaded(true);
+          setColor("red");
+          setTitle(`Error: Failed verfication`);
+          setMessage(`The token provided is invalid`);
+        });
+    }
+    verification();
+  }, [token]);
   return (
     <Flex align={"center"} height={"100vh"} justify={"center"}>
       <Spinner hidden={isLoaded} size={"xl"} />
