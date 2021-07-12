@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const sgMail = require("@sendgrid/mail");
+const { default: axios } = require("axios");
 
 const BASE_URL =
   process.env.NODE_ENV === "development"
@@ -27,6 +28,21 @@ const handler = async (event) => {
   const token = extractCookies(event.headers.cookie).jwt;
   try {
     const payload = jwt.verify(token, process.env.SECRET);
+
+    const alreadyVerifiedResponse = await axios({
+      url: `https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${payload.user.id}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bot ${process.env.BOT_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(alreadyVerifiedResponse);
+
+    if (alreadyVerifiedResponse.data.roles.includes(process.env.ROLE_ID)) {
+      return { statusCode: 200, body: "User already verified" };
+    }
+
     const newPayload = jwt.sign(
       { collegEmail: event.body.email, id: payload.user.id },
       process.env.SECRET,

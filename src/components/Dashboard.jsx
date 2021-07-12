@@ -123,15 +123,27 @@ function EmailForm() {
         .post("/api/email", { email: email })
         .then((response) => {
           setIsLoading(false);
-          toast({
-            title: "Email Sent",
-            description:
-              "Your verification request has been submitted. Please check your college email.",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
-          setButtonColor("green");
+          if (response.data === "User already verified") {
+            toast({
+              title: "User is already verified",
+              description: "A verified role already exists on your user.",
+              status: "warning",
+              duration: 5000,
+              isClosable: true,
+            });
+            setButtonColor("orange");
+          } else {
+            toast({
+              title: "Email Sent",
+              description:
+                "Your verification request has been submitted. Please check your college email.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            });
+            setButtonColor("green");
+
+          }
         })
         .catch((err) => {
           setIsLoading(false);

@@ -6,26 +6,23 @@ const handler = async (event) => {
   try {
     const token = event.queryStringParameters.token;
     const payload = jwt.verify(token, process.env.SECRET);
-    // let responseData = {};
     if (payload) {
       console.info("invoking discord verification");
-      let responseData = {};
-      const request = await axios({
-        url: "https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${payload.id}/roles/${process.env.ROLE_ID}",
+      const instance = await axios({
+        url: `https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${payload.id}/roles/${process.env.ROLE_ID}`,
         method: "PUT",
-        
+
         headers: {
           Authorization: `Bot ${process.env.BOT_TOKEN}`,
           "Content-Type": "application/json",
         },
+      }).catch((err) => {
+        throw err;
       });
-
-      const response = await instance.then((response) =>
-        console.log(response.statusText)
-      );
+      
       return {
-        statusCode: response.statusCode,
-        body: response.statusText,
+        statusCode: 204,
+        body: instance.statusText,
       };
     }
     return {
