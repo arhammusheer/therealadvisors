@@ -6,10 +6,6 @@ const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8888"
     : process.env.URL;
-
-const ENDPOINT =
-  process.env.NODE_ENV === "development" ? "/.netlify/functions" : "/api";
-
 const handler = async (event) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -59,7 +55,7 @@ const handler = async (event) => {
 Hey there ${payload.user.username}#${payload.user.discriminator}!
 
 Please verify your email by clicking the link below.
-${BASE_URL}${ENDPOINT}/verify?token=${newPayload}
+${BASE_URL}/verify?token=${newPayload}
 
 This link will expire in 1 hour.
 
