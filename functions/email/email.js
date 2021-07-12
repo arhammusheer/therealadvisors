@@ -37,7 +37,6 @@ const handler = async (event) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(alreadyVerifiedResponse);
 
     if (alreadyVerifiedResponse.data.roles.includes(process.env.ROLE_ID)) {
       return { statusCode: 200, body: "User already verified" };
