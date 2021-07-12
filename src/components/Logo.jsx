@@ -4,9 +4,11 @@ export default function Logo() {
   return (
     <Box>
       <Avatar
-        bg={"transparent"}
+        boxShadow={"lg"}
+        bg={"black"}
+        size={"md"}
         name={"The Real Advisors"}
-        src={"./logo-500.png"}
+        src={"./logo.svg"}
       />
     </Box>
   );

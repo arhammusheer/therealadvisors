@@ -1,15 +1,17 @@
 const jwt = require("jsonwebtoken");
+const sgMail = require("@sendgrid/mail");
 
 const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8888"
     : process.env.BASE_URL;
+
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "/.netlify/functions" : "/api";
 
 const handler = async (event) => {
-  const sgMail = require("@sendgrid/mail");
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
   if (!event.headers.cookie) {
     return callback({
       statusCode: 400,
@@ -55,13 +57,16 @@ Team Real Advisors
     try {
       sgMail
         .send(msg)
-        .then(() => console.info(`Email sent to ${msg.to}`))
+        .then(() => {
+          console.info(`Email sent to ${msg.to}`);
+        })
         .catch((err) => {
           console.error(err);
           throw err;
         });
       return {
         statusCode: 204,
+        body: `{"message":"Sent"}`,
       };
     } catch (err) {
       console.error(err);
