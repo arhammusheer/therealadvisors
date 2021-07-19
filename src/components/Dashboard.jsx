@@ -10,7 +10,7 @@ import {
   Link,
   Stack,
   Text,
-  Tooltip,
+  // Tooltip,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -206,101 +206,101 @@ function EmailForm() {
   );
 }
 
-function DocumentForm({ user }) {
-  const [file, setFile] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const formData = new FormData();
-  const toast = useToast();
+// function DocumentForm({ user }) {
+//   const [file, setFile] = useState(null);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [isDisabled, setIsDisabled] = useState(false);
+//   const formData = new FormData();
+//   const toast = useToast();
 
-  function handleFile(event) {
-    console.log(event.target.files[0]);
-    if (event.target.files[0].size > 2 * 1024 * 1024) {
-      setIsDisabled(true);
-      toast({
-        title: "File size is too large",
-        description: "The file size limit is set to 2MB",
-        status: "warning",
-        isClosable: true,
-      });
-    } else {
-      setIsDisabled(false);
-      setFile(event.target.files[0]);
-    }
-  }
-  async function handleForm(event) {
-    setIsLoading(true);
-    event.preventDefault();
+//   function handleFile(event) {
+//     console.log(event.target.files[0]);
+//     if (event.target.files[0].size > 2 * 1024 * 1024) {
+//       setIsDisabled(true);
+//       toast({
+//         title: "File size is too large",
+//         description: "The file size limit is set to 2MB",
+//         status: "warning",
+//         isClosable: true,
+//       });
+//     } else {
+//       setIsDisabled(false);
+//       setFile(event.target.files[0]);
+//     }
+//   }
+//   async function handleForm(event) {
+//     setIsLoading(true);
+//     event.preventDefault();
 
-    formData.append("file", file);
+//     formData.append("file", file);
 
-    await axios
-      .post("/api/verify-using-docs", formData)
-      .then((response) => {
-        console.log(response);
-        toast({
-          title: "Your request has been submitted",
-          description:
-            "Please wait while the mods review your verification request.",
-          status: "success",
-          duration: 4000,
-          isClosable: true,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: "An error occured",
-          description:
-            "We could not submit your verification request due to an internal error. Please try again later.",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      })
-      .then(() => {
-        setIsLoading(false);
-      });
-  }
+//     await axios
+//       .post("/api/verify-using-docs", formData)
+//       .then((response) => {
+//         console.log(response);
+//         toast({
+//           title: "Your request has been submitted",
+//           description:
+//             "Please wait while the mods review your verification request.",
+//           status: "success",
+//           duration: 4000,
+//           isClosable: true,
+//         });
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         toast({
+//           title: "An error occured",
+//           description:
+//             "We could not submit your verification request due to an internal error. Please try again later.",
+//           status: "error",
+//           duration: 2000,
+//           isClosable: true,
+//         });
+//       })
+//       .then(() => {
+//         setIsLoading(false);
+//       });
+//   }
 
-  return (
-    <Stack direction={"column"} align={"center"}>
-      <ChatIcon w={"70px"} h={"70px"} />
-      <Text fontSize={"lg"}>Verify Using Documents</Text>
-      <form onSubmit={handleForm}>
-        <InputGroup>
-          <Input
-            name={"college-document"}
-            type={"file"}
-            accept={"image/*, application/pdf"}
-            multiple={false}
-            onChange={handleFile}
-            required
-            style={{ display: "flex", alignItems: "center" }}
-          />
-          <Tooltip
-            label="Hey, I'm here!"
-            aria-label="A tooltip"
-            isDisabled={isDisabled}
-          >
-            <Button
-              borderRadius={"md"}
-              ml={1}
-              type={"submit"}
-              isLoading={isLoading}
-              isDisabled={isDisabled}
-            >
-              <ArrowRightIcon />
-            </Button>
-          </Tooltip>
-        </InputGroup>
-        <Text fontSize={"sm"} color={"red.400"} hidden={!isDisabled}>
-          File size is limited to 2MB
-        </Text>
-      </form>
-    </Stack>
-  );
-}
+//   return (
+//     <Stack direction={"column"} align={"center"}>
+//       <ChatIcon w={"70px"} h={"70px"} />
+//       <Text fontSize={"lg"}>Verify Using Documents</Text>
+//       <form onSubmit={handleForm}>
+//         <InputGroup>
+//           <Input
+//             name={"college-document"}
+//             type={"file"}
+//             accept={"image/*, application/pdf"}
+//             multiple={false}
+//             onChange={handleFile}
+//             required
+//             style={{ display: "flex", alignItems: "center" }}
+//           />
+//           <Tooltip
+//             label="Hey, I'm here!"
+//             aria-label="A tooltip"
+//             isDisabled={isDisabled}
+//           >
+//             <Button
+//               borderRadius={"md"}
+//               ml={1}
+//               type={"submit"}
+//               isLoading={isLoading}
+//               isDisabled={isDisabled}
+//             >
+//               <ArrowRightIcon />
+//             </Button>
+//           </Tooltip>
+//         </InputGroup>
+//         <Text fontSize={"sm"} color={"red.400"} hidden={!isDisabled}>
+//           File size is limited to 2MB
+//         </Text>
+//       </form>
+//     </Stack>
+//   );
+// }
 
 function IsInServerComponent({ user }) {
   return (
