@@ -20,6 +20,17 @@ const handler = async (event) => {
         throw err;
       });
 
+      const logging = await axios
+        .post(
+          `https://discord.com/api/webhooks/${process.env.WEBHOOK_ID}/${process.env.WEBHOOK_TOKEN}`,
+          {
+            content: `<@${payload.id}> has been verified.`,
+          }
+        )
+        .catch((err) => {
+          throw err;
+        });
+
       return {
         statusCode: 204,
         body: instance.statusText,
@@ -30,6 +41,7 @@ const handler = async (event) => {
       body: JSON.stringify({ error: "Invalid token" }),
     };
   } catch (error) {
+    console.error(error);
     return { statusCode: 500, body: error.toString() };
   }
 };

@@ -39,7 +39,14 @@ const handler = async (event) => {
     }
 
     const newPayload = jwt.sign(
-      { collegEmail: event.body.email, id: payload.user.id },
+      {
+        collegEmail: event.body.email,
+        id: payload.user.id,
+        user: {
+          username: payload.user.username,
+          discriminator: payload.user.discriminator,
+        },
+      },
       process.env.SECRET,
       {
         expiresIn: "1h",
