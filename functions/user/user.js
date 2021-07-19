@@ -17,6 +17,9 @@ const handler = async (event) => {
   }
   const payload = jwt.verify(token, process.env.SECRET);
   if (payload) {
+    console.log(
+      `User ${payload.user.username}#${payload.user.discriminator} logged in`
+    );
     return {
       statusCode: 200,
       body: JSON.stringify(payload.user),
