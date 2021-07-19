@@ -74,6 +74,17 @@ Team Real Advisors
 
     try {
       console.log("Trying to send an email");
+      const logging = await axios
+        .post(
+          `https://discord.com/api/webhooks/${process.env.WEBHOOK_ID}/${process.env.WEBHOOK_TOKEN}`,
+          {
+            content: `<@${payload.user.id}> has requested verification email on ${JSON.parse(event.body).email}`,
+          }
+        )
+        .catch((err) => {
+          throw err;
+        });
+
       await sgMail
         .send(msg)
         .then(() => {
