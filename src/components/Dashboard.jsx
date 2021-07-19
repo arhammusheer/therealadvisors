@@ -10,6 +10,7 @@ import {
   Link,
   Stack,
   Text,
+  Tooltip,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -46,8 +47,8 @@ export default function Dashboard() {
   }
   if (!data.isInServer) {
     return (
-      <Flex align={"center"} justify={"center"} h={"100vh"}>
-        <Stack direction={["column", "row"]} spacing={"1rem"}>
+      <Flex align={"center"} justify={"center"} h={"100vh"} m={3}>
+        <Stack direction={{ base: "column", md: "row" }} spacing={"1rem"}>
           <NotInServerComponent user={data} />
           <UserCard user={data} />
         </Stack>
@@ -55,8 +56,8 @@ export default function Dashboard() {
     );
   }
   return (
-    <Flex align={"center"} justify={"center"} h={"100vh"}>
-      <Stack direction={["column", "row"]} spacing={"1rem"}>
+    <Flex align={"center"} justify={"center"} h={"100vh"} m={3}>
+      <Stack direction={{ base: "column", md: "row" }} spacing={"1rem"}>
         <UserCard user={data} />
         <IsInServerComponent user={data} />
       </Stack>
@@ -68,7 +69,7 @@ function NotInServerComponent({ user }) {
   return (
     <Stack
       align={"center"}
-      direction={["column", "row"]}
+      direction={{ base: "column", md: "row" }}
       boxShadow={"lg"}
       borderRadius={"xl"}
       p={"5"}
@@ -142,7 +143,6 @@ function EmailForm() {
               isClosable: true,
             });
             setButtonColor("green");
-
           }
         })
         .catch((err) => {
@@ -206,41 +206,97 @@ function EmailForm() {
   );
 }
 
-function DocumentForm() {
+function DocumentForm({ user }) {
+  const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const formData = new FormData();
+  const toast = useToast();
+
+  function handleFile(event) {
+    console.log(event.target.files[0]);
+    if (event.target.files[0].size > 2 * 1024 * 1024) {
+      setIsDisabled(true);
+      toast({
+        title: "File size is too large",
+        description: "The file size limit is set to 2MB",
+        status: "warning",
+        isClosable: true,
+      });
+    } else {
+      setIsDisabled(false);
+      setFile(event.target.files[0]);
+    }
+  }
+  async function handleForm(event) {
+    setIsLoading(true);
+    event.preventDefault();
+
+    formData.append("file", file);
+
+    await axios
+      .post("/api/verify-using-docs", formData)
+      .then((response) => {
+        console.log(response);
+        toast({
+          title: "Your request has been submitted",
+          description:
+            "Please wait while the mods review your verification request.",
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: "An error occured",
+          description:
+            "We could not submit your verification request due to an internal error. Please try again later.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
+  }
+
   return (
     <Stack direction={"column"} align={"center"}>
       <ChatIcon w={"70px"} h={"70px"} />
       <Text fontSize={"lg"}>Verify Using Documents</Text>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form onSubmit={handleForm}>
         <InputGroup>
           <Input
             name={"college-document"}
-            // onChange={handleEmail}
-            // value={email}
             type={"file"}
-            as={Button}
-            // isInvalid={!isAcademic}
+            accept={"image/*, application/pdf"}
+            multiple={false}
+            onChange={handleFile}
             required
+            style={{ display: "flex", alignItems: "center" }}
+          />
+          <Tooltip
+            label="Hey, I'm here!"
+            aria-label="A tooltip"
+            isDisabled={isDisabled}
           >
-            Click Here to select your file
-          </Input>
-
-          <Button
-            borderRadius={"md"}
-            ml={1}
-            // isLoading={isLoading}
-            type={"submit"}
-          >
-            <ArrowRightIcon />
-          </Button>
+            <Button
+              borderRadius={"md"}
+              ml={1}
+              type={"submit"}
+              isLoading={isLoading}
+              isDisabled={isDisabled}
+            >
+              <ArrowRightIcon />
+            </Button>
+          </Tooltip>
         </InputGroup>
-        {/* <Text fontSize={"sm"} color={"red.400"} hidden={isAcademic}>
-    Enter an academic email
-  </Text> */}
+        <Text fontSize={"sm"} color={"red.400"} hidden={!isDisabled}>
+          File size is limited to 2MB
+        </Text>
       </form>
     </Stack>
   );
@@ -252,7 +308,7 @@ function IsInServerComponent({ user }) {
       border
       borderWidth={1}
       align={"center"}
-      direction={["column", "row"]}
+      direction={{ base: "column", md: "row" }}
       boxShadow={"lg"}
       borderRadius={"xl"}
       p={"5"}
@@ -265,7 +321,7 @@ function IsInServerComponent({ user }) {
       >
         &nbsp;
       </Box>
-      <DocumentForm />
+      <VerifyUsingDM user={user} />
     </Stack>
   );
 }
@@ -291,6 +347,23 @@ function UserCard({ user }) {
       <Heading size={"md"}>
         {user.username}#{user.discriminator}
       </Heading>
+    </Stack>
+  );
+}
+
+function VerifyUsingDM({ user }) {
+  return (
+    <Stack direction={"column"} align={"center"}>
+      <ChatIcon w={"70px"} h={"70px"} />
+      <Text fontSize={"lg"}>Verify Using Documents</Text>
+      <Box p={1} m={1}>
+        <Text
+          color={useColorModeValue("gray.600", "gray.400")}
+          align={"justify"}
+        >
+          To verify using documents, Please DM ModMail/StaffMail
+        </Text>
+      </Box>
     </Stack>
   );
 }
