@@ -50,8 +50,8 @@ export default function Home() {
                 h={"100%"}
 								mx={"3"}
                 src={useColorModeValue(
-                  "https://discord.com/assets/92ad040ed5143bfb541ea61f5c3bb18f.svg",
-                  "https://discord.com/assets/364fc8a0ee7fcebf47ca6ebd16ec12f1.svg"
+                  "/images/discord-logo-dark.svg",
+                  "/images/discord-logo-light.svg"
                 )}
               />
             </Button>
