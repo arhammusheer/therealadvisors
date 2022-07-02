@@ -1,8 +1,7 @@
 import {
+  Box,
   Button,
-  Container,
   Flex,
-  Heading,
   Image,
   Link,
   Text,
@@ -13,29 +12,41 @@ import { motion } from "framer-motion";
 export default function Home() {
   const MotionFlex = motion(Flex);
   return (
-    <MotionFlex
-      align={"center"}
-      h={"100vh"}
-      animate="in"
-      initial="initial"
-      exit="out"
-      variants={{
-        initial: { opacity: 0 },
-        in: { opacity: 1 },
-        out: { opacity: 0 },
-      }}
-      transition={{ duration: 1 }}
-    >
-      <Container>
-        <Heading>
-          <Text fontSize={{ base: "2xl", md: "4xl" }}>Welcome to</Text>
+    <Box bgGradient={"radial(purple.600, red.500 , blue.600)"}>
+      <MotionFlex
+        align={"center"}
+        justify={"center"}
+        direction={"column"}
+        h={"100vh"}
+        animate="in"
+        initial="initial"
+        maxW={"100vw"}
+        bg={useColorModeValue("#FFFFFFA0", "#1A202CB0")}
+        exit="out"
+        variants={{
+          initial: { opacity: 0.5 },
+          in: { opacity: 1 },
+          out: { opacity: 0 },
+        }}
+        transition={{ duration: 1 }}
+      >
+        <Box>
           <Text
-            fontSize={{ base: "4xl", md: "6xl" }}
-            bgGradient="linear(to-l, #347eeb,#cf2d08)"
-            bgClip="text"
+            fontSize={{ base: "100px", md: "200px" }}
+            fontFamily={"Bebas Neue"}
+            lineHeight={"0.9"}
+            textAlign={"center"}
           >
-            The Real Advisors
+            The
+            <br />
+            <Box bgGradient="linear(to-l, #347eeb,#cf2d08)" bgClip="text">
+              Real
+              <br />
+              Advisors
+            </Box>
           </Text>
+        </Box>
+        <Box>
           <Link
             textDecoration={"none"}
             href={
@@ -48,7 +59,7 @@ export default function Home() {
               Login with
               <Image
                 h={"100%"}
-								mx={"3"}
+                mx={"3"}
                 src={useColorModeValue(
                   "/images/discord-logo-dark.svg",
                   "/images/discord-logo-light.svg"
@@ -56,8 +67,8 @@ export default function Home() {
               />
             </Button>
           </Link>
-        </Heading>
-      </Container>
-    </MotionFlex>
+        </Box>
+      </MotionFlex>
+    </Box>
   );
 }
