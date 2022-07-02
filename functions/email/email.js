@@ -55,7 +55,7 @@ const handler = async (event) => {
 
     const msg = {
       to: JSON.parse(event.body).email, // Change to your recipient
-      from: "therealadvisors@croissant.ml", // Change to your verified sender
+      from: "therealadvisors@croissant.one", // Change to your verified sender
       subject: "Verification Email",
       html: Template(payload.user, `${BASE_URL}/verify/${newPayload}`),
       text: `
